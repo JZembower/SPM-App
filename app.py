@@ -14,10 +14,19 @@ from itertools import combinations
 def moving_average(data, window_size=200):
     return np.convolve(data, np.ones(window_size) / window_size, mode='valid')
 
-# Function for single t-test
+# Function for single t-test with visualization
 def single_ttest(data, col, alpha=0.05):
     values = data[col].dropna().values
     t_stat, p_value = stats.ttest_1samp(values, 0)
+    
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.hist(values, bins=20, color='blue', alpha=0.7, edgecolor='black')
+    ax.axvline(np.mean(values), color='red', linestyle='dashed', linewidth=2, label='Mean')
+    ax.set_title(f"Histogram of {col}")
+    ax.set_xlabel("Value")
+    ax.set_ylabel("Frequency")
+    ax.legend()
+    st.pyplot(fig)
     
     st.write(f"**Single T-test for {col}:** t = {t_stat:.4f}, p = {p_value:.4f}")
     if p_value < alpha:
@@ -76,10 +85,16 @@ def spm_paired_ttest(data, col_left, col_right, alpha=0.05, window_size=200):
     else:
         st.warning(f"No significant difference found (p >= {alpha})")
 
-# Function for ANOVA
+# Function for ANOVA with visualization
 def anova_test(data, columns, alpha=0.05):
     values = [data[col].dropna().values for col in columns]
     f_stat, p_value = stats.f_oneway(*values)
+    
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.boxplot(values, labels=columns)
+    ax.set_title("ANOVA Boxplot")
+    ax.set_ylabel("Values")
+    st.pyplot(fig)
     
     st.write(f"**ANOVA Test for {', '.join(columns)}:** F = {f_stat:.4f}, p = {p_value:.4f}")
     if p_value < alpha:
