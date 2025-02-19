@@ -68,7 +68,7 @@ def spm_paired_ttest(data, col_left, col_right, alpha=0.05, window_size=200):
 
 
 # Streamlit UI
-st.title("SPM-Like Paired T-Test Visualization")
+st.title("SPM Paired T-Test Visualization")
 
 # File Upload
 uploaded_file = st.file_uploader("Upload your dataset (CSV or Excel)", type=["csv", "xlsx"])
@@ -86,8 +86,8 @@ if uploaded_file is not None:
 
     # Column Selection
     col_options = df.columns.tolist()
-    col_left = st.selectbox("Select first column (left)", col_options)
-    col_right = st.selectbox("Select second column (right)", col_options)
+    col_left = st.selectbox("Select first column", col_options)
+    col_right = st.selectbox("Select second column", col_options)
 
     # Parameters
     alpha = st.slider("Select significance level (alpha)", 0.01, 0.10, 0.05, 0.01)
